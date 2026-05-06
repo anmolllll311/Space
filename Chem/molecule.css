@@ -1,0 +1,394 @@
+/* ============================================
+   Molecule View (Dedicated Page)
+   ============================================ */
+
+.molecule-bg {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-color, #ABC4B0);
+  z-index: -1;
+}
+
+/* Override the base search-bar-wrapper centering for molecule page */
+.molecule-fixed-top {
+  position: fixed !important;
+  top: 3rem !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  z-index: 100 !important;
+  transition: none !important; /* No slide animation from fact-mode */
+}
+
+.molecule-view-container {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+#three-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Loading */
+#mol-loading {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.2rem;
+  z-index: 50;
+  background: rgba(171, 196, 176, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+#mol-loading.show {
+  display: flex;
+}
+
+.spin {
+  width: 4rem;
+  height: 4rem;
+  border: 3px solid rgba(26, 26, 26, 0.2);
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spin-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  color: #1a1a1a;
+  font-weight: 500;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Tooltip & Error */
+#error-msg {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(228, 79, 25, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(228, 79, 25, 0.4);
+  color: #e44f19;
+  padding: 1rem 2rem;
+  border-radius: 1.2rem;
+  font-size: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  z-index: 200;
+  display: none;
+  text-align: center;
+}
+
+#atom-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  display: none;
+  z-index: 200;
+  min-width: 120px;
+}
+
+#atom-tooltip .tt-sym {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #ABC4B0;
+}
+#atom-tooltip .tt-nm {
+  font-size: 1.2rem;
+}
+#atom-tooltip .tt-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.4rem;
+}
+
+/* Side Panel with Square Drawer Handle */
+#mol-side-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 36rem;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #ABC4B0;
+  font-family: 'Montserrat', sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: none;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+#mol-side-panel.open {
+  transform: translateX(0);
+}
+
+/* Square drawer handle sticking out */
+.drawer-handle {
+  position: absolute;
+  left: -4.8rem;
+  top: 3.2rem;
+  width: 4.8rem;
+  height: 5.6rem;
+  background: rgba(171, 196, 176, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: none;
+  border-top-left-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  z-index: 31;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-handle:hover {
+  /* background and color now permanent in base class */
+  left: -5.2rem;
+  width: 5.2rem;
+}
+
+.drawer-handle svg {
+  transition: transform 0.4s;
+}
+
+#mol-side-panel.open .drawer-handle svg {
+  transform: rotate(180deg);
+}
+
+#molecule-info-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}
+#molecule-info-content::-webkit-scrollbar {
+  width: 4px;
+}
+#molecule-info-content::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.mol-name {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  color: #ABC4B0;
+  letter-spacing: -0.02em;
+}
+.mol-formula {
+  font-size: 1.4rem;
+  color: rgba(171, 196, 176, 0.6);
+  margin-bottom: 2.4rem;
+  font-family: 'Instrument Sans', sans-serif;
+  letter-spacing: 0.1em;
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(40, 40, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  text-align: center;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.stat-card:hover {
+  background: rgba(60, 60, 60, 0.6);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: rgba(171, 196, 176, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ABC4B0;
+}
+
+.info-block {
+  background: rgba(40, 40, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.2rem;
+  padding: 1.6rem;
+  margin-bottom: 1.2rem;
+  transition: all 0.3s;
+}
+
+.info-block:hover {
+  border-color: rgba(171, 196, 176, 0.2);
+  background: rgba(60, 60, 60, 0.6);
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: rgba(171, 196, 176, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.info-value {
+  font-size: 1.4rem;
+  color: #ABC4B0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.atom-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.4rem 0.8rem 0.4rem 0;
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  background: rgba(60, 60, 60, 0.4);
+  border: 1px solid rgba(171, 196, 176, 0.1);
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.atom-chip:hover {
+  background: rgba(171, 196, 176, 0.15);
+  transform: translateY(-1px);
+}
+
+.atom-dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+#atom-card {
+  display: none;
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+  border: 1px solid rgba(171, 196, 176, 0.2);
+  border-radius: 1.6rem;
+  padding: 2rem;
+  margin-bottom: 2.4rem;
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+#atom-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #ABC4B0;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#atom-card .ac-sym {
+  font-weight: 800;
+  font-size: 3.2rem;
+  color: #ABC4B0;
+  margin-right: 1.6rem;
+  line-height: 1;
+}
+#atom-card .ac-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ABC4B0;
+  margin-bottom: 0.4rem;
+}
+#atom-card .ac-desc {
+  font-size: 1.2rem;
+  color: rgba(171, 196, 176, 0.8);
+  margin-top: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Toggleable IUPAC Field */
+.iupac-block {
+  cursor: pointer;
+  position: relative;
+}
+
+.iupac-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.iupac-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.iupac-block.expanded .iupac-content {
+  max-height: 40rem;
+  margin-top: 1rem;
+}
+
+.toggle-indicator {
+  font-size: 0.8rem;
+  color: rgba(171, 196, 176, 0.4);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.iupac-block.expanded .toggle-indicator {
+  transform: rotate(180deg);
+}

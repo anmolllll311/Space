@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Piano</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-frame">
+        <header>
+            <h1>Piano</h1>
+            <div class="technical-info">
+                <span>EST. 2026</span>
+                <span>/</span>
+                <span>Studio Practice</span>
+            </div>
+        </header>
+
+        <main class="hero-content animate-up">
+            <a href="practice.html" class="cta-bespoke" id="start-btn">
+                Practice Notes
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 30H50M50 30L35 15M50 30L35 45" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </a>
+        </main>
+
+        <footer class="app-footer">
+            <div>© 2026</div>
+            <div>SCROLL TO TUNE / CLICK TO FOCUS</div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('start-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.app-frame').style.opacity = '0';
+            document.querySelector('.app-frame').style.transition = 'opacity 0.8s ease';
+            setTimeout(() => {
+                window.location.href = 'practice.html';
+            }, 800);
+        });
+    </script>
+</body>
+
+</html>

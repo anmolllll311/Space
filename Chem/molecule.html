@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemistry - Molecule Explorer</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="molecule_styles.css">
+  <link rel="stylesheet" href="molecule.css">
+</head>
+<body>
+  <!-- Clean primary background -->
+  <div class="molecule-bg"></div>
+
+  <!-- Back Button (Mirroring Drawer Handle) -->
+  <a href="index.html" class="chem-back-btn" title="Back to Chemistry Hub">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg);">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </a>
+
+  <!-- Search Bar — identical structure to index.html -->
+  <div class="search-bar-wrapper molecule-fixed-top">
+    <div class="search-bar">
+      <div class="search-bar-inner">
+        <div class="search-content">
+          <div class="search-placeholder" id="search-placeholder">
+            <span class="search-prefix" id="search-prefix"></span>
+            <span class="search-topic" id="search-topic"></span>
+          </div>
+          <form class="search-form" id="mol-search-form">
+            <input type="text" autocomplete="off" class="search-input" id="mol-search-input" name="query" value="" placeholder="">
+          </form>
+          <div class="molecule-actions" style="margin-left: auto;">
+            <button class="search-clear-btn" id="mol-search-clear" title="Dots">
+              <!-- Content will be injected by molecule.js -->
+            </button>
+            <button class="search-submit-btn" id="mol-search-submit">
+              <svg class="btn-icon" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                <path d="M15.7871 9.33008c0 .22786-.0944.42969-.2832.60547l-4.7461 4.73635c-.1758.1758-.3743.2636-.5957.2636-.22786 0-.41991-.0748-.57616-.2246-.14974-.1497-.22461-.3385-.22461-.5664 0-.1106.01953-.2148.05859-.3125.04557-.1041.10417-.1953.17578-.2734l1.3184-1.3379 2.9882-2.70508.2344.44922-2.5488.17576H3.0332c-.24739 0-.44922-.0748-.60547-.22458-.14974-.15625-.22461-.35157-.22461-.58594 0-.24089.07487-.4362.22461-.58594.15625-.15625.35808-.23437.60547-.23437h8.5547l2.5488.17578-.2344.45898-2.9882-2.71484L9.5957 5.0918c-.07161-.07813-.13021-.16602-.17578-.26368-.03906-.10416-.05859-.21158-.05859-.32226 0-.22787.07487-.41667.22461-.56641.15625-.14974.3483-.22461.57616-.22461.2214 0 .4199.08789.5957.26368l4.7461 4.73632c.1888.17578.2832.38086.2832.61524Z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D View -->
+  <div class="molecule-view-container">
+    <canvas id="three-canvas"></canvas>
+    
+    <div id="mol-loading" class="show">
+      <div class="spin"></div>
+      <div class="spin-text" id="loading-text">Fetching structure from PubChem…</div>
+    </div>
+    
+    <div id="error-msg"></div>
+
+    <div id="atom-tooltip">
+      <div class="tt-sym" id="tt-sym"></div>
+      <div class="tt-nm" id="tt-nm"></div>
+      <div class="tt-hint">Click for full details</div>
+    </div>
+
+    <!-- Side Panel with Square Drawer Toggle -->
+    <div id="mol-side-panel">
+      <!-- The small square handle pointing OUT/LEFT to close -->
+      <button id="mol-panel-handle" class="drawer-handle">
+        <svg id="handle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="panel-header" style="border-bottom: 2px solid rgba(171, 196, 176, 0.15); padding-bottom: 1.2rem; text-align: center; margin-top: 2rem;">
+        <h3 class="panel-title" style="font-size: 1.8rem;">Molecule Info</h3>
+      </div>
+      <div id="molecule-info-content">
+        <div id="mol-content" style="display:none">
+          <div id="atom-card"></div>
+          <div id="mol-main"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="molecule.js"></script>
+</body>
+</html>

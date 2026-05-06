@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kinetic Pixel Void: Minimalist Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --pixel-white: #e0f8cf;
+            --space-bg: #050508;
+            --accent-blue: #00f2ff;
+            --accent-red: #ff0044;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: var(--pixel-white);
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            overflow: hidden;
+            image-rendering: pixelated;
+            touch-action: none;
+        }
+
+        /* --- ATMOSPHERE --- */
+        .crt-scanlines {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            z-index: 2000;
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* --- PHYSICS ENTITIES --- */
+        #physics-world {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+        }
+
+        .entity {
+            position: absolute;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+
+        /* ATOM VISUALS */
+        .pixel-atom {
+            width: 70px;
+            height: 70px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nucleus {
+            width: 14px;
+            height: 14px;
+            background: var(--accent-red);
+            border: 3px solid #000;
+            box-shadow: 0 0 10px var(--accent-red);
+            z-index: 5;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 2px solid rgba(0, 242, 255, 0.4);
+            border-radius: 50%;
+            animation: spin 5s linear infinite;
+        }
+        .orbit-1 { width: 70px; height: 30px; transform: rotate(45deg); }
+        .orbit-2 { width: 70px; height: 30px; transform: rotate(-45deg); animation-delay: -2.5s; }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* CONSOLE VISUALS */
+        .pixel-console {
+            width: 60px;
+            height: 75px;
+            background: #3d3f4d;
+            border: 4px solid #000;
+            padding: 4px;
+            box-shadow: inset -4px -4px 0 #2b2e3a;
+        }
+
+        .console-screen {
+            background: #8bac0f;
+            height: 44px;
+            border: 3px solid #000;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+        }
+
+        .grid-cell { background: #0f380f; opacity: 0.1; }
+        .grid-cell.active-x { 
+            opacity: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 8px; 
+            color: #0f380f;
+        }
+
+        /* FRUIT VISUALS */
+        .pixel-fruit {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #000;
+            position: relative;
+        }
+        .fruit-stem {
+            position: absolute;
+            top: -10px; left: 14px;
+            width: 6px; height: 10px;
+            background: #4e2b1b;
+            border: 2px solid #000;
+        }
+        .apple { background: #d81159; box-shadow: inset -6px -6px 0 #890620; }
+        .orange { background: #fb8500; box-shadow: inset -6px -6px 0 #e36414; }
+        .pear { background: #2ecc71; box-shadow: inset -6px -6px 0 #1b8a4c; }
+
+        .label {
+            margin-top: 10px;
+            font-size: 8px;
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            border: 2px solid #fff;
+            white-space: nowrap;
+        }
+
+        /* --- UI OVERLAY --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pixel-card {
+            background: #e0f8cf;
+            border: 8px solid #000;
+            color: #0f380f;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 10px 10px 0 #000;
+        }
+
+        .close-btn {
+            background: #0f380f;
+            color: #9bbc0f;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 10px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="crt-scanlines"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="space-container">
+        <div id="physics-world"></div>
+    </div>
+
+    <!-- UI Overlay -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModule()">
+        <div class="pixel-card" onclick="event.stopPropagation()">
+            <h2 id="m-title" class="text-lg mb-6 underline">MODULE_ID</h2>
+            <p id="m-body" class="text-[10px] leading-loose">READY...</p>
+            <button class="close-btn" onclick="closeModule()">BACK_TO_VOID</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const world = document.getElementById('physics-world');
+        const overlay = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('m-title');
+        const mBody = document.getElementById('m-body');
+
+        let width, height;
+        const entities = [];
+        const stars = [];
+
+        const config = [
+            { id: '3DCHEM', type: 'atom', label: '3D_CHEM', color: '#ff0044' },
+            { id: 'TICTACTOE', type: 'console', label: 'TTT_LOGIC', color: '#4a4d5e' },
+            { id: 'SOON_1', type: 'apple', label: 'NODE_01', color: '#d81159' },
+            { id: 'SOON_2', type: 'orange', label: 'NODE_02', color: '#fb8500' },
+            { id: 'SOON_3', type: 'pear', label: 'NODE_03', color: '#2ecc71' }
+        ];
+
+        function initStars() {
+            stars.length = 0;
+            const starCount = 150;
+            for (let i = 0; i < starCount; i++) {
+                const speed = Math.random() * 0.5 + 0.1;
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 1 + 0.5, // Smaller stars
+                    speed: speed,
+                    trailLen: speed * 5 // Minimal trail
+                });
+            }
+        }
+
+        function initEntities() {
+            world.innerHTML = '';
+            entities.length = 0;
+            config.forEach((cfg, index) => {
+                const el = document.createElement('div');
+                el.className = 'entity';
+                el.onclick = () => openModule(cfg.id);
+
+                let content = '';
+                if (cfg.type === 'atom') {
+                    content = `<div class="pixel-atom"><div class="nucleus"></div><div class="orbit orbit-1"></div><div class="orbit orbit-2"></div></div>`;
+                } else if (cfg.type === 'console') {
+                    content = `<div class="pixel-console"><div class="console-screen"><div class="grid-cell active-x">X</div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell active-x">X</div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell active-x">X</div></div></div>`;
+                } else {
+                    content = `<div class="pixel-fruit ${cfg.type}"><div class="fruit-stem"></div></div>`;
+                }
+
+                el.innerHTML = `${content}<div class="label">${cfg.label}</div>`;
+                world.appendChild(el);
+
+                const size = cfg.type === 'atom' ? 80 : (cfg.type === 'console' ? 75 : 55);
+                entities.push({
+                    el: el,
+                    id: cfg.id,
+                    x: Math.random() * (width - 150) + 75,
+                    y: Math.random() * (height - 150) + 75,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: (Math.random() - 0.5) * 3,
+                    r: size / 2,
+                    mass: size / 8
+                });
+            });
+        }
+
+        function render() {
+            ctx.fillStyle = '#050508';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw Stars and Subtle Trails
+            stars.forEach(star => {
+                // Trail
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(255, 255, 255, 0.15)`;
+                ctx.lineWidth = star.size;
+                ctx.moveTo(star.x, star.y);
+                ctx.lineTo(star.x + star.trailLen, star.y);
+                ctx.stroke();
+
+                // Core
+                ctx.fillStyle = `rgba(255, 255, 255, 0.8)`;
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+
+                star.x -= star.speed;
+                if (star.x < -10) {
+                    star.x = width + 10;
+                    star.y = Math.random() * height;
+                }
+            });
+
+            // Physics Update
+            for (let i = 0; i < entities.length; i++) {
+                const e = entities[i];
+                e.x += e.vx;
+                e.y += e.vy;
+
+                if (e.x < e.r) { e.x = e.r; e.vx *= -1; }
+                if (e.x > width - e.r) { e.x = width - e.r; e.vx *= -1; }
+                if (e.y < e.r) { e.y = e.r; e.vy *= -1; }
+                if (e.y > height - e.r) { e.y = height - e.r; e.vy *= -1; }
+
+                for (let j = i + 1; j < entities.length; j++) {
+                    const e2 = entities[j];
+                    const dx = e2.x - e.x;
+                    const dy = e2.y - e.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const minDist = e.r + e2.r;
+
+                    if (dist < minDist) {
+                        const nx = dx / dist;
+                        const ny = dy / dist;
+                        const overlap = minDist - dist;
+                        e.x -= nx * (overlap / 2);
+                        e.y -= ny * (overlap / 2);
+                        e2.x += nx * (overlap / 2);
+                        e2.y += ny * (overlap / 2);
+
+                        const p = 2 * (e.vx * nx + e.vy * ny - e2.vx * nx - e2.vy * ny) / (e.mass + e2.mass);
+                        e.vx -= p * e2.mass * nx;
+                        e.vy -= p * e2.mass * ny;
+                        e2.vx += p * e.mass * nx;
+                        e2.vy += p * e.mass * ny;
+                    }
+                }
+                e.el.style.transform = `translate(${e.x - e.r}px, ${e.y - e.r}px)`;
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        function openModule(id) {
+            const data = {
+                '3DCHEM': { t: '3D_CHEM_LATTICE', b: 'MOLECULAR SCAN COMPLETE. ATOMIC BONDS STABLE. 3D VISUALIZER ACTIVE.' },
+                'TICTACTOE': { t: 'LOGIC_CONSOLE_v1', b: 'STRATEGIC GRID DETECTED. AWAITING PLAYER ONE INPUT.' },
+                'DEFAULT': { t: 'DATA_UNKNOWN', b: 'COSMIC FRAGMENT UNREADABLE. RIPENING PROCESS INCOMPLETE.' }
+            };
+            const content = data[id] || data['DEFAULT'];
+            mTitle.innerText = content.t;
+            mBody.innerText = content.b;
+            overlay.style.display = 'flex';
+        }
+
+        function closeModule() { overlay.style.display = 'none'; }
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        window.onload = () => {
+            resize();
+            initEntities();
+            render();
+        };
+        window.onresize = resize;
+    </script>
+</body>
+</html>

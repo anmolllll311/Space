@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ABC4B0">
+  <title>Chemistry</title>
+  <meta name="description" content="Chemistry exploration.">
+  <meta property="og:title" content="Chemistry">
+  <meta property="og:description" content="Chemistry exploration.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chemistry">
+  <meta name="twitter:description" content="Chemistry exploration.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://cdn.sanity.io/images/yn2hsvy1/production/88d68648e0b9efec5ae50866c773bed971c21e56-136x140.png?rect=0,2,136,136&w=32&h=32&fm=png&fit=max&auto=format">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Three.js Canvas Background -->
+  <div id="canvas-container">
+    <canvas id="particle-canvas"></canvas>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="page-transition-container">
+      <div class="hero-section">
+        <!-- Custom cursor area -->
+        <div class="cursor-particle-area"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Search Bar -->
+  <div class="search-bar-wrapper">
+    <div class="search-bar">
+      <div class="search-bar-inner">
+        <div class="search-content">
+          <div class="search-placeholder" id="search-placeholder">
+            <span class="search-prefix" id="search-prefix"></span>
+            <span class="search-topic" id="search-topic"></span>
+          </div>
+          <form class="search-form" id="search-form">
+            <input type="text" autocomplete="off" class="search-input" name="query" value="" placeholder="">
+          </form>
+          <div class="search-actions">
+            <button class="search-menu-btn">
+              <svg class="btn-icon" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 -6.5 17 17">
+                <path d="M1.70996 3.39844c-.31901 0-.60547-.07487-.859374-.22461-.253906-.14974-.458984-.35156-.615234-.60547-.1562504-.26042-.23437544-.55013-.23437544-.86914 0-.3125.07812504-.5957.23437544-.849611C.391602.589193.59668.384115.850586.234375 1.10449.078125 1.39095 0 1.70996 0c.30599 0 .58919.078125.84961.234375.26042.14974.4655.354818.61523.615234.15625.253911.23438.537111.23438.849611 0 .31901-.07813.60872-.23438.86914-.14973.25391-.35481.45573-.61523.60547-.26042.14974-.54362.22461-.84961.22461Zm6.74805 0c-.31901 0-.60873-.07487-.86914-.22461-.25391-.14974-.45899-.35156-.61524-.60547-.14974-.26042-.22461-.55013-.22461-.86914 0-.3125.07487-.5957.22461-.849611.15625-.260416.36133-.465494.61524-.615234C7.84928.078125 8.139 0 8.45801 0c.30599 0 .58919.078125.84961.234375.26041.14974.46549.354818.61523.615234.15625.253911.23435.537111.23435.849611 0 .31901-.0781.60872-.23435.86914-.14974.25391-.35482.45573-.61523.60547-.26042.14974-.54362.22461-.84961.22461Zm6.74809 0c-.3191 0-.6088-.07487-.8692-.22461-.2539-.14974-.459-.35156-.6152-.60547-.1498-.26042-.2246-.55013-.2246-.86914 0-.3125.0748-.5957.2246-.849611.1562-.260416.3613-.465494.6152-.615234C14.5973.078125 14.887 0 15.2061 0c.3059 0 .5891.078125.8496.234375.2604.14974.4655.354818.6152.615234.1562.253911.2344.537111.2344.849611 0 .31901-.0782.60872-.2344.86914-.1497.25391-.3548.45573-.6152.60547-.2605.14974-.5437.22461-.8496.22461Z" fill="currentColor"></path>
+              </svg>
+            </button>
+            <button class="search-submit-btn" id="search-submit-btn">
+              <svg class="btn-icon" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                <path d="M15.7871 9.33008c0 .22786-.0944.42969-.2832.60547l-4.7461 4.73635c-.1758.1758-.3743.2636-.5957.2636-.22786 0-.41991-.0748-.57616-.2246-.14974-.1497-.22461-.3385-.22461-.5664 0-.1106.01953-.2148.05859-.3125.04557-.1041.10417-.1953.17578-.2734l1.3184-1.3379 2.9882-2.70508.2344.44922-2.5488.17576H3.0332c-.24739 0-.44922-.0748-.60547-.22458-.14974-.15625-.22461-.35157-.22461-.58594 0-.24089.07487-.4362.22461-.58594.15625-.15625.35808-.23437.60547-.23437h8.5547l2.5488.17578-.2344.45898-2.9882-2.71484L9.5957 5.0918c-.07161-.07813-.13021-.16602-.17578-.26368-.03906-.10416-.05859-.21158-.05859-.32226 0-.22787.07487-.41667.22461-.56641.15625-.14974.3483-.22461.57616-.22461.2214 0 .4199.08789.5957.26368l4.7461 4.73632c.1888.17578.2832.38086.2832.61524Z" fill="currentColor"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded panel with navigation -->
+    <div class="search-expanded-panel" id="search-expanded-panel">
+      <div class="expanded-panel-bg">
+        <div class="expanded-content">
+          <div class="expanded-nav" style="justify-content: center;">
+            <ul class="nav-links" style="align-items: center; text-align: center;">
+              <li><a href="periodic-table.html">Periodic Table</a></li>
+              <li><a href="#" class="cursor-pointer">Custom</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="search-tooltip" id="search-tooltip">
+      <div class="tooltip-content">Molecular database and chemical properties.</div>
+    </div>
+  </div>
+
+  <!-- Fact Card -->
+  <div class="fact-card" id="fact-card">
+    <div class="fact-card-inner">
+      <h2 class="fact-title">Random Fact</h2>
+      <div class="fact-body">
+        <p>A single drop of water contains about 1.67 sextillion molecules. Chemistry is the study of how these building blocks interact to form the universe.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chemistry dot labels -->
+  <div class="floating-labels" id="floating-labels"></div>
+
+  <div class="linear-toggle-container">
+    <button type="button" class="linear-toggle" aria-pressed="false" style="font-family: 'Montserrat', sans-serif;">
+      <span class="linear-text">Random fact</span>
+    </button>
+  </div>
+  <div class="blur-overlay" id="blur-overlay"></div>
+  <script src="script.js"></script>
+</body>
+</html>

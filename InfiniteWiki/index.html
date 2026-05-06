@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Infinite Wiki | The Great Race</title>
+    <meta name="description" content="Reach the target Wikipedia page using only internal links. The ultimate test of knowledge.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="paper-container">
+        <header id="masthead">
+            <div id="top-bar">
+                <div class="date" id="current-date"></div>
+            </div>
+            <h1 id="paper-title">The Infinite Wiki</h1>
+
+        </header>
+
+        <nav id="paper-tools">
+            <div id="target-display">
+                <span class="label">TARGET:</span>
+                <span id="target-page-name">Loading...</span>
+            </div>
+            <div id="action-section">
+                <button id="challenge-btn" title="Daily Challenge">CHALLENGE</button>
+                <button id="random-btn" title="Refresh Mission">REFRESH</button>
+                <button id="share-btn" title="Copy URL">SHARE</button>
+            </div>
+            <div id="counter-section">
+                <div id="timer-display" class="hidden">TIME: <span id="timer">150</span>s</div>
+                <div id="click-display">CLICKS: <span id="count">0</span></div>
+            </div>
+        </nav>
+
+        <main id="paper-main">
+            <article id="headline-story">
+                <h2 id="article-title">The Race Begins</h2>
+                <div id="loader" class="hidden">
+                    <div class="spinner"></div>
+                </div>
+                <div id="article-extract">
+                    <!-- Full Wiki Content injected here -->
+                    <p>Loading content...</p>
+                </div>
+            </article>
+
+            <aside id="sidebar">
+                <div class="sidebar-box">
+                    <h3>Current Path</h3>
+                    <div id="history-trail"></div>
+                </div>
+                <div class="sidebar-box" id="win-box" class="hidden">
+                    <h3 style="color: var(--accent)">VICTORY!</h3>
+                    <p>You reached the target! Click 'REFRESH' to play again.</p>
+                </div>
+            </aside>
+        </main>
+
+        <footer id="paper-footer">
+            <p>&copy; 2026 The Infinite Wiki. All content provided by the Wikipedia API.</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

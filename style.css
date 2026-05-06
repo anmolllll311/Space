@@ -1,0 +1,396 @@
+:root {
+    --pixel-white: #e0f8cf;
+    --space-bg: #050510;
+    --accent-cyan: #00f2ff;
+    --accent-pink: #ff00c8;
+    --accent-red: #ff0044;
+    --accent-blue: #3498db;
+    --accent-green: #00ff66;
+    --console-body: #3d3f4d;
+    --console-screen: #8bac0f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#landing-page * {
+    cursor: none !important; /* Only hide pointers on the main void page */
+}
+
+body {
+    background-color: var(--space-bg);
+    color: var(--pixel-white);
+    font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    overflow: hidden;
+    image-rendering: pixelated;
+    height: 100vh;
+    width: 100vw;
+}
+
+#starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+#physics-world {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.entity {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    pointer-events: auto;
+}
+
+.big-bang-visual {
+    animation: big-bang-entry 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes big-bang-entry {
+    0% { opacity: 0; transform: scale(0.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- OXYGEN ATOM (8 Electrons, Clustered Nucleus) --- */
+.pixel-atom {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nucleus-cluster {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    z-index: 10;
+    filter: drop-shadow(0 0 8px var(--accent-red));
+    animation: nucleus-float 4s ease-in-out infinite;
+}
+
+@keyframes nucleus-float {
+    0%, 100% { transform: scale(1) translate(0,0); }
+    50% { transform: scale(1.05) translate(1px, -1px); }
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #000;
+    border-radius: 50%; /* Pure spheric shape */
+}
+
+.proton { 
+    background: var(--accent-red); 
+    box-shadow: 
+        inset -1px -1px 0 #890620,
+        inset 1px 1px 0 #ff6b8b;
+}
+
+.neutron { 
+    background: var(--accent-blue); 
+    box-shadow: 
+        inset -1px -1px 0 #1f4e79,
+        inset 1px 1px 0 #85c1e9;
+}
+
+/* Organic positions will be handled via JS for better packing */
+
+.orbit {
+    position: absolute;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.orbit-inner { width: 50px; height: 30px; transform: rotate(0deg); }
+.orbit-mid { width: 85px; height: 50px; transform: rotate(60deg); }
+.orbit-outer { width: 110px; height: 65px; transform: rotate(-60deg); }
+
+.electron {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-green);
+    border: 2px solid #000;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-green);
+    animation: orbit-move 4s linear infinite;
+}
+
+.electron-inner { offset-path: ellipse(25px 15px); }
+.electron-mid { offset-path: ellipse(42px 25px); }
+.electron-outer { offset-path: ellipse(55px 32px); }
+
+@keyframes orbit-move {
+    from { offset-distance: 0%; }
+    to { offset-distance: 100%; }
+}
+
+/* --- REALISTIC RETRO CONSOLE --- */
+/* --- SIMPLE STANDALONE 3x3 GRID --- */
+/* --- PIXEL TIC-TAC-TOE --- */
+.pixel-ttt-grid {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The Grid Lines */
+.ttt-line {
+    position: absolute;
+    background: var(--accent-green);
+    box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+.ttt-v1 { left: 19px; top: 0; bottom: 0; width: 2px; }
+.ttt-v2 { left: 39px; top: 0; bottom: 0; width: 2px; } /* Corrected for 60px grid */
+.ttt-h1 { top: 19px; left: 0; right: 0; height: 2px; }
+.ttt-h2 { top: 39px; left: 0; right: 0; height: 2px; } /* Corrected for 60px grid */
+
+/* True Pixel Symbols (White X, Red O) */
+.pixel-marker {
+    position: absolute;
+    width: 2px; /* Single pixel unit */
+    height: 2px;
+}
+
+.pixel-marker.x {
+    background: var(--pixel-white);
+    box-shadow: 
+        2px 2px 0 var(--pixel-white), 4px 4px 0 var(--pixel-white), 6px 6px 0 var(--pixel-white), 8px 8px 0 var(--pixel-white),
+        8px 0 0 var(--pixel-white), 6px 2px 0 var(--pixel-white), 2px 6px 0 var(--pixel-white), 0 8px 0 var(--pixel-white);
+    width: 2px; height: 2px;
+}
+
+.pixel-marker.o {
+    background: transparent;
+    box-shadow: 
+        2px 0 0 var(--accent-red), 4px 0 0 var(--accent-red), 6px 0 0 var(--accent-red),
+        0 2px 0 var(--accent-red), 8px 2px 0 var(--accent-red),
+        0 4px 0 var(--accent-red), 8px 4px 0 var(--accent-red),
+        0 6px 0 var(--accent-red), 8px 6px 0 var(--accent-red),
+        2px 8px 0 var(--accent-red), 4px 8px 0 var(--accent-red), 6px 8px 0 var(--accent-red);
+    width: 2px; height: 2px;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* --- WIKIPEDIA LOGO (EXACT VERSION) --- */
+.pixel-wiki-globe {
+    width: 65px;
+    height: 65px;
+    position: relative;
+    border-radius: 50%;
+    background: #e6e6e6;
+    overflow: hidden;
+    /* Exactly matching the 5-6 piece hole silhouette at the top */
+    clip-path: polygon(
+        15% 25%, 28% 18%, 32% 10%, 45% 20%, 58% 5%, 72% 12%, 
+        82% 5%, 92% 15%, 100% 30%, 100% 100%, 0% 100%, 0% 30%
+    );
+    border: 1px solid #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wiki-texture-layer {
+    position: absolute;
+    width: 300%;
+    height: 100%;
+    /* Interlocking Jigsaw Pattern using complex CSS layers */
+    background-image: 
+        radial-gradient(circle at 10px 10px, #ccc 4px, transparent 5px), /* Jigsaw Nub */
+        linear-gradient(90deg, #bbb 1px, transparent 1px),
+        linear-gradient(0deg, #bbb 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: wiki-glide 12s linear infinite; /* Slower for adoration */
+}
+
+@keyframes wiki-glide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-40px); }
+}
+
+/* Atmospheric Directional Shading (Reference Match) */
+.wiki-shading {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5) 0%, transparent 50%), /* Top-Left Highlight */
+        radial-gradient(circle at 80% 80%, rgba(0,0,0,0.4) 0%, transparent 60%);    /* Bottom-Right Shadow */
+}
+
+.wiki-glyph-layer {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    display: flex;
+    animation: wiki-glide 6s linear infinite;
+    align-items: center;
+}
+
+.wiki-char {
+    width: 20px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: #444;
+}
+
+/* --- PIXEL ASTRONAUT CURSOR --- */
+#astronaut-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Don't block clicking icons! */
+    z-index: 10000; /* Always on top */
+    will-change: transform;
+}
+
+.pixel-astronaut {
+    width: 32px;
+    height: 48px;
+    position: relative;
+    animation: astronaut-tumble 12s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes astronaut-tumble {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hand-draw the high-fidelity Golden Voyager (2px unit) */
+.astro-body {
+    position: absolute;
+    width: 2px; /* 1 pixel unit = 2 CSS pixels */
+    height: 2px;
+    background: #fff;
+    /* High detail 16x16 sprite */
+    box-shadow:
+        /* Helmet Crown */
+        4px -2px 0 #fff, 6px -2px 0 #fff, 8px -2px 0 #fff, 10px -2px 0 #fff, 12px -2px 0 #fff,
+        2px 0 0 #fff, 14px 0 0 #fff, 
+        0 2px 0 #fff, 16px 2px 0 #fff,
+        /* Gold Visor */
+        2px 4px 0 #f1c40f, 4px 4px 0 #f1c40f, 6px 4px 0 #f1c40f, 8px 4px 0 #f1c40f, 10px 4px 0 #f1c40f, 12px 4px 0 #f1c40f, 14px 4px 0 #f1c40f,
+        2px 6px 0 #f1c40f, 4px 6px 0 #fff, 6px 6px 0 #f1c40f, 8px 6px 0 #f1c40f, 10px 6px 0 #f1c40f, 12px 6px 0 #f1c40f, 14px 6px 0 #f1c40f, /* Reflect */
+        2px 8px 0 #d4ac0d, 4px 8px 0 #d4ac0d, 6px 8px 0 #d4ac0d, 8px 8px 0 #d4ac0d, 10px 8px 0 #d4ac0d, 12px 8px 0 #d4ac0d, 14px 8px 0 #d4ac0d,
+        0 10px 0 #fff, 16px 10px 0 #fff,
+        2px 12px 0 #fff, 4px 12px 0 #fff, 6px 12px 0 #fff, 8px 12px 0 #fff, 10px 12px 0 #fff, 12px 12px 0 #fff, 14px 12px 0 #fff,
+        /* Torso & Backpack */
+        -2px 14px 0 #2c3e50, 0 14px 0 #fff, 16px 14px 0 #fff, 
+        -4px 16px 0 #2c3e50, -2px 16px 0 #2c3e50, 0 16px 0 #fff, 4px 16px 0 #3498db, 12px 16px 0 #fff, 16px 16px 0 #fff,
+        -4px 18px 0 #2c3e50, -2px 18px 0 #2c3e50, 0 18px 0 #fff, 4px 18px 0 #fff, 8px 18px 0 #fff, 12px 18px 0 #fff, 16px 18px 0 #fff,
+        -4px 20px 0 #2c3e50, -2px 20px 0 #2c3e50, 2px 20px 0 #fff, 6px 20px 0 #fff, 10px 20px 0 #fff, 14px 20px 0 #fff,
+        /* Legs */
+        4px 22px 0 #fff, 12px 22px 0 #fff,
+        4px 24px 0 #fff, 12px 24px 0 #fff,
+        2px 26px 0 #ccc, 4px 26px 0 #ccc, 10px 26px 0 #ccc, 12px 26px 0 #ccc; /* Boots */
+}
+/* --- PIXEL PIANO DESIGN (BLOCKY) --- */
+.pixel-piano {
+    width: 64px;
+    height: 40px;
+    background: #000;
+    position: relative;
+    box-shadow: 4px 4px 0 rgba(255,255,255,0.1);
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+}
+
+.white-key {
+    width: 8px;
+    background: #fff;
+    height: 100%;
+    position: relative;
+    box-shadow: inset 0 -4px 0 #ccc;
+}
+
+.black-key {
+    position: absolute;
+    width: 4px;
+    height: 20px;
+    background: #000;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    box-shadow: 0 2px 0 #333;
+}
+
+.piano-body {
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: #444;
+}
+
+/* --- IMAGINAIRE 3D LOGO (?) --- */
+.imaginaire-logo {
+    width: 80px;
+    height: 80px;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rotating-question {
+    width: 40px;
+    height: 60px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate3d 6s linear infinite;
+}
+
+.q-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    color: var(--accent-cyan);
+    text-shadow: 
+        0 0 10px var(--accent-cyan),
+        1px 1px 0px #008888,
+        2px 2px 0px #008888,
+        3px 3px 0px #007777,
+        4px 4px 0px #006666,
+        5px 5px 0px #005555;
+    backface-visibility: visible;
+}
+
+.q-face.front { transform: translateZ(0); }
+
+@keyframes rotate3d {
+    from { transform: rotateY(0deg) rotateX(15deg); }
+    to { transform: rotateY(360deg) rotateX(15deg); }
+}

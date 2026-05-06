@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Designs Showcase</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --pixel-white: #e0f8cf;
+            --space-bg: #050510;
+            --accent-cyan: #00f2ff;
+            --accent-pink: #ff00c8;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: var(--pixel-white);
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            gap: 50px;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .icon-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* --- PIXEL PIANO DESIGN (BLOCKY) --- */
+        .pixel-piano {
+            width: 64px;
+            height: 40px;
+            background: #000;
+            position: relative;
+            box-shadow: 4px 4px 0 rgba(255,255,255,0.1);
+            display: flex;
+            gap: 2px; /* Chunkier gaps */
+            padding: 2px;
+        }
+
+        .white-key {
+            width: 8px; /* Fixed blocky width */
+            background: #fff;
+            height: 100%;
+            position: relative;
+            box-shadow: inset 0 -4px 0 #ccc; /* Pixel shading */
+        }
+
+        .black-key {
+            position: absolute;
+            width: 4px;
+            height: 20px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 2px 0 #333;
+        }
+
+        .piano-body {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: #444;
+        }
+
+        /* --- IMAGINAIRE 3D LOGO (?) --- */
+        .imaginaire-logo {
+            width: 80px;
+            height: 80px;
+            perspective: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rotating-question {
+            width: 40px;
+            height: 60px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate3d 6s linear infinite;
+        }
+
+        .q-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: var(--accent-cyan);
+            text-shadow: 
+                0 0 10px var(--accent-cyan),
+                1px 1px 0px #008888,
+                2px 2px 0px #008888,
+                3px 3px 0px #007777,
+                4px 4px 0px #006666,
+                5px 5px 0px #005555;
+            backface-visibility: visible;
+        }
+
+        .q-face.front { transform: translateZ(0); }
+
+        @keyframes rotate3d {
+            from { transform: rotateY(0deg) rotateX(15deg); }
+            to { transform: rotateY(360deg) rotateX(15deg); }
+        }
+
+        .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon-box">
+            <div class="label">Pixel Piano</div>
+            <div class="pixel-piano">
+                <div class="piano-body"></div>
+                <div class="white-key"></div>
+                <div class="white-key"><div class="black-key"></div></div>
+                <div class="white-key"><div class="black-key"></div></div>
+                <div class="white-key"></div>
+                <div class="white-key"><div class="black-key"></div></div>
+                <div class="white-key"><div class="black-key"></div></div>
+                <div class="white-key"><div class="black-key"></div></div>
+                <div class="white-key"></div>
+            </div>
+        </div>
+
+        <div class="icon-box">
+            <div class="label">Imaginaire</div>
+            <div class="imaginaire-logo">
+                <div class="rotating-question">
+                    <div class="q-face front">?</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

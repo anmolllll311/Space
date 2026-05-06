@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-color: var(--space-bg);
+            color: var(--pixel-white);
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-transform: uppercase;
+            cursor: none !important;
+        }
+
+        * {
+            cursor: none !important;
+        }
+
+        #starfield {
+            opacity: 0.15;
+            filter: blur(1px);
+        }
+
+        .minimalist-wrapper {
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 3s ease-out;
+        }
+
+        h1 {
+            font-size: 0.9rem;
+            letter-spacing: 1rem;
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            margin: 0 auto 3rem;
+        }
+
+        .status {
+            font-size: 0.5rem;
+            letter-spacing: 0.4rem;
+            opacity: 0.3;
+            margin-bottom: 6rem;
+            animation: pulse 5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: scale(0.98); }
+            50% { opacity: 0.5; transform: scale(1); }
+        }
+
+        .nav-link {
+            color: var(--pixel-white);
+            text-decoration: none;
+            font-size: 0.5rem;
+            letter-spacing: 0.6rem;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0.6;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+            color: var(--accent-pink);
+            border-color: var(--accent-pink);
+            letter-spacing: 0.8rem;
+            background: rgba(255, 0, 200, 0.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ensure entities don't clutter the minimalist view */
+        #physics-world, .entity {
+            display: none !important;
+            pointer-events: none !important;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <!-- Hidden container to satisfy script.js requirements without showing entities -->
+    <div id="physics-world"></div>
+    
+    <div class="minimalist-wrapper">
+        <h1>Space</h1>
+        <div class="divider"></div>
+        <p class="status">Coming Soon</p>
+        <a href="index.html" class="nav-link">Return</a>
+    </div>
+
+    <div id="astronaut-cursor">
+        <div class="pixel-astronaut">
+            <div class="astro-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

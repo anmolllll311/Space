@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X O — Online</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.2/peerjs.min.js"></script>
+<link rel="stylesheet" href="tictactoe.css">
+</head>
+<body>
+
+<h1><span>X</span><span> / </span><span>O</span></h1>
+<p class="subtitle">Online Multiplayer</p>
+
+<!-- MENU -->
+<div class="screen active" id="screen-menu">
+  <button class="btn primary" onclick="showScreen('screen-host')">Create Room (Play as X)</button>
+  <button class="btn secondary" onclick="showScreen('screen-join')">Join Room (Play as O)</button>
+</div>
+
+<!-- HOST -->
+<div class="screen" id="screen-host">
+  <div class="label">Your room code</div>
+  <div class="room-code-box">
+    <span class="label">Share this with your friend</span>
+    <span class="room-code" id="host-code">——</span>
+    <button class="btn" id="copy-btn" onclick="copyCode()">Copy Code</button>
+  </div>
+  <div class="status-bar" id="host-status">Waiting for opponent...</div>
+  <button class="btn" onclick="showScreen('screen-menu'); resetPeer()">Back</button>
+</div>
+
+<!-- JOIN -->
+<div class="screen" id="screen-join">
+  <div class="label">Enter room code</div>
+  <input id="join-input" type="text" maxlength="6" placeholder="e.g. ABC123" />
+  <button class="btn secondary" onclick="joinRoom()">Join</button>
+  <div class="status-bar" id="join-status" style="display:none"></div>
+  <button class="btn" onclick="showScreen('screen-menu'); resetPeer()">Back</button>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="screen-game">
+  <div class="board-wrap">
+    <div class="scoreboard">
+      <div class="score-side x">
+        <div class="who" id="x-label">X (You)</div>
+        <div class="val" id="score-x">0</div>
+      </div>
+      <div class="score-sep">:</div>
+      <div class="score-side o">
+        <div class="who" id="o-label">O (Them)</div>
+        <div class="val" id="score-o">0</div>
+      </div>
+    </div>
+
+    <div class="turn-indicator wait" id="turn-indicator">Waiting...</div>
+
+    <div class="board" id="board">
+      <div class="cell" onclick="cellClick(0)"></div>
+      <div class="cell" onclick="cellClick(1)"></div>
+      <div class="cell" onclick="cellClick(2)"></div>
+      <div class="cell" onclick="cellClick(3)"></div>
+      <div class="cell" onclick="cellClick(4)"></div>
+      <div class="cell" onclick="cellClick(5)"></div>
+      <div class="cell" onclick="cellClick(6)"></div>
+      <div class="cell" onclick="cellClick(7)"></div>
+      <div class="cell" onclick="cellClick(8)"></div>
+    </div>
+
+    <div class="status-bar" id="game-status"></div>
+    <div style="height:8px"></div>
+    <button class="btn" id="rematch-btn" style="display:none" onclick="requestRematch()">Rematch</button>
+    <button class="btn" onclick="leaveGame()">Leave</button>
+  </div>
+</div>
+
+<script src="tictactoe.js"></script>
+</body>
+</html>

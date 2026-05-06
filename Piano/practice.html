@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Piano</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-frame">
+        <header>
+            <h1>Piano</h1>
+            <div class="side-controls">
+                <button class="btn-minimal" id="settings-toggle">Settings</button>
+                <a href="index.html" class="btn-minimal">Exit</a>
+            </div>
+        </header>
+
+        <main class="practice-grid animate-up">
+            <div class="note-display-bespoke" id="note-text">--</div>
+            
+            <div class="session-info">
+                <h3 class="session-heading">Currently Practicing</h3>
+                <button class="btn-minimal btn-large" id="play-pause-btn">Start Session</button>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            NOTES ELAPSED: <span id="note-count">0</span>
+        </footer>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settings-overlay">
+        <button class="close-bespoke" id="close-settings-x">&times;</button>
+        <div class="settings-inner">
+            <h2 class="settings-heading">Tuning</h2>
+            
+            <div class="setting-row">
+                <label>Octave Range</label>
+                <div class="range-inputs">
+                    <input type="text" id="range-from" value="C2" placeholder="From">
+                    <input type="text" id="range-to" value="C6" placeholder="To">
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <label>Interval Speed</label>
+                <input type="number" id="speed" value="3" step="0.5" min="0.5">
+            </div>
+
+            <div class="setting-row">
+                <label>Voice Selection</label>
+                <div class="custom-select-container">
+                    <button class="custom-select-trigger" id="voice-trigger"><span>Select Voice</span></button>
+                    <div class="custom-options" id="voice-options">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <label>Voice Speed</label>
+                <input type="number" id="voice-rate" value="5" step="0.5" min="0.5" max="10">
+            </div>
+
+            <button class="btn-minimal btn-large settings-save-btn" id="save-settings">Apply Changes</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
