@@ -65,19 +65,19 @@ class FloatingEntity {
         // Wrap for CSS animation isolation
         this.el.innerHTML = `<div class="big-bang-visual">${content}</div>`;
         this.el.onclick = () => {
-            if (this.type === 'tictactoe') {
-                window.location.href = 'tictactoe/tictactoe.html';
-            } else if (this.type === 'atom') {
-                window.location.href = 'Chem/index.html';
-            } else if (this.type === 'wikipedia') {
-                window.location.href = 'InfiniteWiki/index.html';
-            } else if (this.type === 'piano') {
-                window.location.href = 'Piano/index.html';
-            } else if (this.type === 'imaginaire') {
-                window.location.href = 'Imaginaire/index.html';
-            } else {
-                window.location.href = 'coming-soon.html';
-            }
+            const routes = {
+                tictactoe: 'tictactoe/index.html',
+                atom: 'Chem/index.html',
+                wikipedia: 'InfiniteWiki/index.html',
+                piano: 'Piano/index.html',
+                imaginaire: 'coming-soon.html'
+            };
+            const target = routes[this.type] || 'coming-soon.html';
+            document.body.style.transition = 'opacity 0.4s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = target;
+            }, 350);
         };
         
         // Immediate position set to avoid top-left flicker
