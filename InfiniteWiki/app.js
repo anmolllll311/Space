@@ -197,17 +197,28 @@ function displayFullPage(title, html) {
     links.forEach(link => {
         const href = link.getAttribute('href');
         
-        // Wikipedia internal links in REST API look like "./Title"
+        // Wikipedia internal links in REST API look like "./Title" or "/wiki/Title"
         if (href && (href.startsWith('./') || href.startsWith('/wiki/'))) {
-            const linkTitle = decodeURIComponent(href.replace('./', '').replace('/wiki/', '').replace(/_/g, ' '));
+            let rawTitle = href.replace(/^\.\//, '').replace(/^\/wiki\//, '').split('#')[0].split('?')[0];
+            const linkTitle = decodeURIComponent(rawTitle.replace(/_/g, ' ')).trim();
             
-            link.onclick = (e) => {
-                e.preventDefault();
-                clickCount++;
-                countDisplay.innerText = clickCount;
-                fetchFullWikiPage(linkTitle);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
+            // Ignore non-article links, root/index paths, and special namespaces
+            const isInvalid = !linkTitle || 
+                              linkTitle.toLowerCase() === 'index.html' || 
+                              /^(file|special|help|wikipedia|talk|category|portal|template):/i.test(linkTitle);
+
+            if (!isInvalid) {
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    clickCount++;
+                    countDisplay.innerText = clickCount;
+                    fetchFullWikiPage(linkTitle);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+            } else {
+                link.style.pointerEvents = 'none';
+                link.style.opacity = '0.5';
+            }
         } else {
             // Remove external links or make them non-functional to keep user in the game
             link.style.pointerEvents = 'none';
